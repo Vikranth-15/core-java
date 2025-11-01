@@ -1,0 +1,187 @@
+🧠 Simple Definition
+
+Abstraction means showing only the essential details and hiding the unnecessary implementation details from the user.
+
+🎯 Real-Life Example
+
+Think of a car:
+
+When you drive a car, you use the steering wheel, accelerator, and brakes.
+
+You don’t need to know how the engine works inside or how fuel converts into motion.
+
+👉 That’s abstraction — you use the car without worrying about the internal complexity.
+
+💻 In Java
+
+In Java, abstraction is achieved using:
+
+Abstract classes
+
+Interfaces
+
+Both allow you to hide implementation and show only the functionality that’s relevant.
+
+🧩 1. Abstract Class
+
+An abstract class is a class that cannot be instantiated (you can’t create objects of it).
+It can contain:
+
+     Abstract methods (no body)
+
+     Concrete methods (with body)
+
+
+
+abstract class Animal {
+    abstract void sound(); // abstract method (no body)
+
+    void sleep() {         // normal method
+        System.out.println("Sleeping...");
+    }
+}
+
+class Dog extends Animal {
+    void sound() {  // providing implementation
+        System.out.println("Bark");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal a = new Dog();  // reference of abstract class, object of subclass
+        a.sound();             // Output: Bark
+        a.sleep();             // Output: Sleeping...
+    }
+}
+
+✅ Here, the Animal class hides the details of how each animal makes a sound.
+Each subclass (Dog, Cat, etc.) gives its own implementation.
+
+
+
+What abstract means (quick)
+
+abstract is a keyword used to declare:
+
+Abstract classes — classes that may contain incomplete (abstract) behavior and cannot be instantiated.
+
+Abstract methods — method declarations without a body; subclasses must provide the implementation (unless the subclass is also abstract).
+
+// abstract class
+public abstract class Animal {
+    // abstract method (no body)
+    public abstract void sound();
+
+    // concrete method (has a body)
+    public void sleep() { System.out.println("Sleeping..."); }
+}
+
+
+  Rules & important facts
+
+Abstract methods
+
+Declared with abstract and no body: abstract void foo();
+
+Cannot be final, static, or private.
+
+final prevents overriding; static is class-level; private hides from subclasses — all conflict with "must override".
+
+If a class has one (or more) abstract methods, the class must be declared abstract.
+
+A concrete (non-abstract) subclass must implement all inherited abstract methods or it must itself be declared abstract.
+
+
+
+
+Abstract classes
+
+Declared with abstract class. Example: public abstract class Animal { ... }.
+
+Cannot be instantiated: new Animal() → compile error.
+
+Can have:
+
+Abstract methods.
+
+Concrete methods (with bodies).
+
+Fields (instance and static), constructors, final methods, static methods.
+
+A main method (yes, an abstract class can have public static void main).
+
+Cannot be final (you can’t be abstract and final at once — contradictory).
+
+Can extend other classes and implement interfaces.
+
+A subclass’s constructor will call the abstract class constructor via super(...).
+
+Example — simple & clear
+
+abstract class Animal {
+    String name;
+    public Animal(String name) { this.name = name; }
+
+    // abstract method — subclasses must implement
+    public abstract void sound();
+
+    // concrete method
+    public void sleep() { System.out.println(name + " is sleeping"); }
+}
+
+class Dog extends Animal {
+    public Dog(String name) { super(name); }
+
+    @Override
+    public void sound() {
+        System.out.println(name + " says: Woof!");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal a = new Dog("Buddy"); // allowed: reference type abstract
+        a.sound();  // Buddy says: Woof!
+        a.sleep();  // Buddy is sleeping
+    }
+}
+
+
+
+Example — Template Method pattern (common use)
+
+Abstract class provides the skeleton of an algorithm; subclasses fill in steps.
+
+abstract class DataProcessor {
+    // template method — final to lock algorithm structure
+    public final void process() {
+        readData();
+        processData();
+        writeData();
+    }
+
+    protected abstract void readData();
+    protected abstract void processData();
+
+    // optional default step
+    protected void writeData() { System.out.println("Write default output"); }
+}
+
+class CSVProcessor extends DataProcessor {
+    @Override protected void readData()  { System.out.println("Read CSV"); }
+    @Override protected void processData() { System.out.println("Process CSV"); }
+}
+
+
+new CSVProcessor().process() runs the fixed sequence, while subclasses define details.
+
+Anonymous subclass — you can "instantiate" by implementing inline
+
+Animal anon = new Animal("Mystery") {
+    @Override public void sound() { System.out.println("..."); }
+};
+anon.sound();
+
+
+This creates an anonymous concrete subclass that implements the abstract methods.
